@@ -130,8 +130,8 @@ spec:
         #   done;
         env:
         - name: ORDERSAPI_URL
-          value: http://10.100.81.33
+          value: http://13.76.138.132
         - name: PRODUCTSAPI_URL
-          value: http://10.100.81.34
+          value: http://13.76.138.142
       imagePullSecrets:
       - name: myregistrykey
