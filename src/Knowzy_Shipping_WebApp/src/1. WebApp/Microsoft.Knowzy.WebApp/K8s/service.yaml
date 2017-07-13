@@ -12,7 +12,7 @@ spec:
     app: dotnetcoreapp
     component: ordersapi 
     type: LoadBalancer
-    load-balancer-ip: '1.2.3.4'
+    loadBalancerIP: 1.2.3.4
 ---
 apiVersion: v1
 kind: Service
@@ -28,7 +28,7 @@ spec:
     app: dotnetcoreapp
     component: productsapi 
     type: LoadBalancer
-    load-balancer-ip: '5.6.7.8'
+    loadBalancerIP: 5.6.7.8
 ---
 apiVersion: v1
 kind: Service
