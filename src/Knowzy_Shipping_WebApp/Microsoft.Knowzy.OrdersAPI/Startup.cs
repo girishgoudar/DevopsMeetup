@@ -9,75 +9,59 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
 // THE CODE OR THE USE OR OTHER DEALINGS IN THE CODE.
 // ******************************************************************
-
-using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Knowzy.Repositories.Core;
-using Micrososft.Knowzy.Repositories.Contracts;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace Microsoft.Knowzy.WebApp
+namespace Microsoft.Knowzy.OrdersAPI
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
+        public IConfigurationRoot Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureCommonServices(services);
-            services.AddSingleton<IOrderRepository, OrderRepository>();
+            // Add framework services.
+            services.AddMvc();
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<Data.IOrdersStore, Data.OrdersStore>();
         }
 
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            ConfigureCommonServices(services);
-            services.AddSingleton<IOrderRepository, OrderRepository>();
-        }
-
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseMvc();
 
-            if (env.IsDevelopment())
+            JsonConvert.DefaultSettings = () =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "default",
-                    "{controller=Shippings}/{action=Index}/{id?}");
-            });
-        }
-
-        private void ConfigureCommonServices(IServiceCollection services)
-        {
-            services.AddMvc();
-            services.AddAutoMapper();
-            services.AddMemoryCache();
-            services.AddSingleton<IConfiguration>(Configuration);
+                return new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            };
         }
     }
 }
