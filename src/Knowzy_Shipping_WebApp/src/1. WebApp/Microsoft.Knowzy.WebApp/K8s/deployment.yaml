@@ -1,0 +1,137 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: ordersapi
+# spec:
+#     containers:
+#     - name: ordersapi
+#       image: acrgirish.azurecr.io/knowzy/ordersapi:1
+#       command: [ "sh", "-c"]
+#       args:
+#       - while true; do
+#           echo -en '\n';
+#           printenv MY_OPOD_NAME MY_OPOD_NAMESPACE;
+#           printenv MY_OPOD_IP;
+#           sleep 10;
+#         done;
+#       env:
+#       - name: COSMOSDB_ENDPOINT
+#         value: https://devopsmeetupcosmosdb.documents.azure.com:443
+#       - name: COSMOSDB_KEY
+#         value: "ZbeHgqDG9dZLfv3rDh9mHDXYigF7Tw9Iro3tC3hqqdJIlbvSv6svATkQxXIVrjEWaSCDLhH6yA2QXPYyRjhdWQ=="
+#       - name: MY_OPOD_NAME
+#         valueFrom:
+#           fieldRef:
+#             fieldPath: metadata.name
+#       - name: MY_OPOD_NAMESPACE
+#         valueFrom:
+#           fieldRef:
+#             fieldPath: metadata.namespace
+#       - name: MY_OPOD_IP
+#         valueFrom:
+#           fieldRef:
+#             fieldPath: status.podIP
+#     imagePullSecrets:
+#       - name: myregistrykey
+
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ordersapi
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: dotnetcoreapp
+        component: ordersapi
+    spec:
+      containers:
+      - name: ordersapi
+        image: acrgirish.azurecr.io/knowzy/ordersapi:1
+        env:
+        - name: COSMOSDB_ENDPOINT
+          value: https://devopsmeetupcosmosdb.documents.azure.com:443
+        - name: COSMOSDB_KEY
+          value: "ZbeHgqDG9dZLfv3rDh9mHDXYigF7Tw9Iro3tC3hqqdJIlbvSv6svATkQxXIVrjEWaSCDLhH6yA2QXPYyRjhdWQ=="
+        # - name: MY_OPOD_NAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.name
+        # - name: MY_OPOD_NAMESPACE
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.namespace
+        # - name: MY_OPOD_IP
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: status.podIP
+       
+      imagePullSecrets:
+        - name: myregistrykey
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: productsapi 
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: dotnetcoreapp
+        component: productsapi 
+    spec:
+      containers:
+      - name: productsapi 
+        image: acrgirish.azurecr.io/knowzy/productsapi:1
+        env:
+        - name: COSMOSDB_ENDPOINT
+          value: https://devopsmeetupcosmosdb.documents.azure.com:443
+        - name: COSMOSDB_KEY
+          value: "ZbeHgqDG9dZLfv3rDh9mHDXYigF7Tw9Iro3tC3hqqdJIlbvSv6svATkQxXIVrjEWaSCDLhH6yA2QXPYyRjhdWQ=="
+        # - name: MY_PPOD_NAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.name
+        # - name: MY_PPOD_NAMESPACE
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.namespace
+        # - name: MY_PPOD_IP
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: status.podIP
+      imagePullSecrets:
+        - name: myregistrykey
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   name: webapp 
+# spec:
+#   replicas: 2
+#   template:
+#     metadata:
+#       labels:
+#         app: dotnetcoreapp
+#         component: webapp 
+#     spec:
+#       containers:
+#       - name: webapp 
+#         image: acrgirish.azurecr.io/knowzy/webapp:1
+#         command: [ "sh", "-c"]
+#         args:
+#         - while true; do
+#             echo -en '\n';
+#             printenv MY_OPOD_IP MY_PPOD_IP;
+#             sleep 10;
+#           done;
+#         env:
+#         - name: ORDERSAPI_URL
+#           value: http://ordersapi
+#         - name: PRODUCTSAPI_URL
+#           value: http://productsapi
+#       imagePullSecrets:
+#       - name: myregistrykey

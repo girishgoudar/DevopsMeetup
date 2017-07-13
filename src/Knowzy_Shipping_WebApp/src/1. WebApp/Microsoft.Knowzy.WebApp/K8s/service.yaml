@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dotnetcoreapp
+    component: ordersapi 
+  name: ordersapi 
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: dotnetcoreapp
+    component: ordersapi 
+    type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dotnetcoreapp
+    component: productsapi 
+  name: productsapi 
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: dotnetcoreapp
+    component: productsapi 
+    type: LoadBalancer
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   labels:
+#     app: dotnetcoreapp
+#     component: webapp 
+#   name: webapp 
+# spec:
+#   ports:
+#   - port: 80
+#   selector:
+#     app: dotnetcoreapp
+#     component: webapp
+#   type: LoadBalancer
+
+
