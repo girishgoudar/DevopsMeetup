@@ -11,7 +11,7 @@ spec:
   selector:
     app: dotnetcoreapp
     component: ordersapi 
-	clusterIP: 10.100.81.33
+  clusterIP: 10.100.81.33
   type: ClusterIP
     #type: LoadBalancer
     #loadBalancerIP: 1.2.3.4
@@ -29,7 +29,7 @@ spec:
   selector:
     app: dotnetcoreapp
     component: productsapi
-	clusterIP: 10.100.81.34
+  clusterIP: 10.100.81.34
   type: ClusterIP
     #type: LoadBalancer
     #loadBalancerIP: 5.6.7.8
