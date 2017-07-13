@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
       - name: ordersapi
-        image: acrgirish.azurecr.io/knowzy/ordersapi:1
+        image: acrgirish.azurecr.io/knowzy/ordersapi:__buildId__
         env:
         - name: COSMOSDB_ENDPOINT
           value: https://devopsmeetupcosmosdb.documents.azure.com:443
@@ -85,7 +85,7 @@ spec:
     spec:
       containers:
       - name: productsapi 
-        image: acrgirish.azurecr.io/knowzy/productsapi:1
+        image: acrgirish.azurecr.io/knowzy/productsapi:__buildId__
         env:
         - name: COSMOSDB_ENDPOINT
           value: https://devopsmeetupcosmosdb.documents.azure.com:443
