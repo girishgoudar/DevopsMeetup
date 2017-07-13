@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
       - name: ordersapi
-        image: acrgirish.azurecr.io/knowzy/ordersapi:__buildId__
+        image: acrgirish.azurecr.io/knowzy/ordersapi:1
         env:
         - name: COSMOSDB_ENDPOINT
           value: https://devopsmeetupcosmosdb.documents.azure.com:443
@@ -105,33 +105,33 @@ spec:
         #       fieldPath: status.podIP
       imagePullSecrets:
         - name: myregistrykey
-# ---
-# apiVersion: extensions/v1beta1
-# kind: Deployment
-# metadata:
-#   name: webapp 
-# spec:
-#   replicas: 2
-#   template:
-#     metadata:
-#       labels:
-#         app: dotnetcoreapp
-#         component: webapp 
-#     spec:
-#       containers:
-#       - name: webapp 
-#         image: acrgirish.azurecr.io/knowzy/webapp:1
-#         command: [ "sh", "-c"]
-#         args:
-#         - while true; do
-#             echo -en '\n';
-#             printenv MY_OPOD_IP MY_PPOD_IP;
-#             sleep 10;
-#           done;
-#         env:
-#         - name: ORDERSAPI_URL
-#           value: http://ordersapi
-#         - name: PRODUCTSAPI_URL
-#           value: http://productsapi
-#       imagePullSecrets:
-#       - name: myregistrykey
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp 
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: dotnetcoreapp
+        component: webapp 
+    spec:
+      containers:
+      - name: webapp 
+        image: acrgirish.azurecr.io/knowzy/webapp:__buildId__
+        # command: [ "sh", "-c"]
+        # args:
+        # - while true; do
+        #     echo -en '\n';
+        #     printenv MY_OPOD_IP MY_PPOD_IP;
+        #     sleep 10;
+        #   done;
+        env:
+        - name: ORDERSAPI_URL
+          value: http://1.2.3.4
+        - name: PRODUCTSAPI_URL
+          value: http://5.6.7.8
+      imagePullSecrets:
+      - name: myregistrykey
